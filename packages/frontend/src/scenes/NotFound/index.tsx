@@ -1,6 +1,15 @@
 import { ReactElement } from "react";
+import { Link } from "react-router-dom";
+import { Stack, Typography } from "@mui/material";
 
 // my todo: дописать норм стили
 export default function NotFound(): ReactElement {
-  return <div>Page not found</div>;
+  return (
+    <Stack gap={5} alignItems="center" justifyContent="center" height="100dvh">
+      <Typography variant="h3">Page not found</Typography>
+      <Link to="/" replace>
+        <Typography variant="h6">Go back to the main page</Typography>
+      </Link>
+    </Stack>
+  );
 }

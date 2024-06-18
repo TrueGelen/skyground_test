@@ -1,7 +1,8 @@
 import { lazy, ReactElement, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import SceneSpinner from "../components/SceneSpinner";
 import AuthGuard from "../guards/AuthGuard";
+import DashboardLayout from "../Layouts/DashboardLayout";
 
 const NotFound = lazy(() => import("./NotFound"));
 const SignIn = lazy(() => import("./SignIn"));
@@ -12,22 +13,17 @@ export default function RootScene(): ReactElement {
   return (
     <Suspense fallback={<SceneSpinner />}>
       <Routes>
-        <Route
-          index
-          element={
-            <AuthGuard>
-              <Dashboard />
-            </AuthGuard>
-          }
-        />
+        <Route index element={<Navigate to="/dashboard" replace />} />
         <Route
           element={
             <AuthGuard>
-              <Dashboard />
+              <DashboardLayout />
             </AuthGuard>
           }
           path="dashboard"
-        />
+        >
+          <Route index element={<Dashboard />} />
+        </Route>
         <Route element={<SignIn />} path="signin" />
         <Route element={<SignUp />} path="signup" />
         <Route element={<NotFound />} path="404" />

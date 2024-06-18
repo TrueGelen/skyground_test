@@ -1,30 +1,30 @@
-import { PropsWithChildren, ReactElement, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import UserContext, { User } from "./context";
 
-type UserProviderProps = PropsWithChildren<{}>;
+type UserProviderProps = { children: ReactNode };
 
 // my todo: потом удалить
 const mockUser = {
-  email: "some@ya.ru",
   firstName: "Vlad",
-  id: "0",
   lastName: "filchagin",
+  fullName: "Vlad Filchagin",
+  email: "some@ya.ru",
+  id: "0",
 };
 
 export default function UserProvider({
   children,
 }: UserProviderProps): ReactElement | null {
-  // my todo: потом сделать норм
   const [user, setUser] = useState<User | null>(null);
-  // const [user, setUser] = useState<User | null>(mockUser);
   const [loading, setLoading] = useState(false);
 
+  // my todo: потом сделать
   const signIn = () => setUser(mockUser);
-
-  // my todo: добавить методы регистрации, логина и пароля
+  const signUp = () => setUser(mockUser);
+  const signOut = () => setUser(null);
 
   return (
-    <UserContext.Provider value={{ user, loading, signIn }}>
+    <UserContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </UserContext.Provider>
   );

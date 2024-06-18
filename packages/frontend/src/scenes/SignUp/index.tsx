@@ -18,7 +18,7 @@ import { SignUpFormData } from "./types";
 import { signUpFormSchema } from "./schemas";
 
 export default function SignUp(): ReactElement {
-  const { user } = useUser();
+  const { user, signUp } = useUser();
   const { state } = useLocation();
   // my todo: может посмотреть, как это типизироавть
   const redirect = state?.prevLocation ?? "/";
@@ -39,6 +39,7 @@ export default function SignUp(): ReactElement {
 
     try {
       // my todo:
+      signUp();
       // await signIn(credentials);
     } catch (error) {
       // my todo: mb ошибку бедет сервер возвращать, вообще посмотреть, как отображаюся
@@ -54,7 +55,12 @@ export default function SignUp(): ReactElement {
   if (user != null) return <Navigate to={redirect} replace />;
 
   return (
-    <Box display="flex" justifyContent="center" p={10}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100%"
+    >
       <Paper elevation={3} sx={{ p: 2 }}>
         <Stack spacing={4}>
           <Typography variant="h3">Sign up to Skyground</Typography>
