@@ -7,22 +7,22 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 const NotFound = lazy(() => import("./NotFound"));
 const SignIn = lazy(() => import("./SignIn"));
 const SignUp = lazy(() => import("./SignUp"));
-const Dashboard = lazy(() => import("./Dashboard"));
+const Users = lazy(() => import("./Users"));
 
 export default function RootScene(): ReactElement {
   return (
     <Suspense fallback={<SceneSpinner />}>
       <Routes>
-        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route index element={<Navigate to="/users" replace />} />
         <Route
           element={
             <AuthGuard>
               <DashboardLayout />
             </AuthGuard>
           }
-          path="dashboard"
+          path="users"
         >
-          <Route index element={<Dashboard />} />
+          <Route index element={<Users />} />
         </Route>
         <Route element={<SignIn />} path="signin" />
         <Route element={<SignUp />} path="signup" />

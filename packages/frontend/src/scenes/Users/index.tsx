@@ -1,5 +1,5 @@
 import { Paper, Stack, Typography } from "@mui/material";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 // my todo:
 const mockDada = [
   { id: "1", email: "some@ya.ru", firstName: "Vlad", lastName: "Filchagin" },
@@ -23,7 +23,28 @@ const mockDada = [
   },
 ] as const;
 
-export default function Dashboard(): ReactElement {
+export default function Users(): ReactElement {
+  useEffect(() => {
+    // Создайте асинхронную функцию для выполнения запроса
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/users");
+        console.log("Users > response", { response });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const result = await response.json();
+        console.log("Users > result", { result });
+      } catch (error) {
+        console.error("Users > result", { error });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Paper elevation={4} sx={{ p: 2 }}>
       <Stack spacing={1}>

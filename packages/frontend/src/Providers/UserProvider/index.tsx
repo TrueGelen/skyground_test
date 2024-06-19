@@ -15,7 +15,7 @@ const mockUser = {
 export default function UserProvider({
   children,
 }: UserProviderProps): ReactElement | null {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(mockUser);
   const [loading, setLoading] = useState(false);
 
   // my todo: потом сделать
