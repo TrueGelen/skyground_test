@@ -21,7 +21,7 @@ export default function SignIn(): ReactElement {
   const { user, signIn } = useUser();
   const { state } = useLocation();
   // my todo: может посмотреть, как это типизироавть
-  const redirect = state?.prevLocation ?? "/";
+  const redirect = state?.redirectTo ?? "/";
 
   const {
     control,
@@ -98,7 +98,7 @@ export default function SignIn(): ReactElement {
 
           <Typography variant="caption" textAlign="center">
             <span>New to Skyground? </span>
-            <Link to="/signup" state={{ prevLocation: redirect }}>
+            <Link to="/signup" state={{ redirectTo: redirect }}>
               Create an account
             </Link>
           </Typography>

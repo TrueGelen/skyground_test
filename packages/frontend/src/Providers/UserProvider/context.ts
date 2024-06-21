@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { Dispatch, SetStateAction, createContext } from "react";
 
 export type User = {
   id: string;
@@ -10,18 +10,12 @@ export type User = {
 
 export type UserContextType = {
   user: User | null;
-  loading: boolean;
-  signIn: () => void;
-  signOut: () => void;
-  signUp: () => void;
+  setUser: Dispatch<SetStateAction<User | null>>;
 };
 
 const defaultContextValue: UserContextType = {
   user: null,
-  loading: true,
-  signIn: () => undefined,
-  signOut: () => undefined,
-  signUp: () => undefined,
+  setUser: () => undefined,
 };
 
 const UserContext = createContext<UserContextType>(defaultContextValue);

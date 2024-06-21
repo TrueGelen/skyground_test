@@ -25,7 +25,6 @@ const mockDada = [
 
 export default function Users(): ReactElement {
   useEffect(() => {
-    // Создайте асинхронную функцию для выполнения запроса
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:8080/users");

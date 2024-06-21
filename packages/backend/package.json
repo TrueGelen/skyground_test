@@ -3,17 +3,32 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts"
+    "dev": "nodemon --exec node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration": "yarn run typeorm migration:run -- -d ./src/data-source.ts",
+    "db:migration:generate": "sh -c 'yarn typeorm migration:generate ./src/db/migrations/${1:-migration}' migration"
   },
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.12.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5",
+    "@types/cookie-parser": "^1",
     "@types/cors": "^2",
     "@types/express": "^4",
+    "@types/jsonwebtoken": "^9",
     "@types/node": "^20.14.5",
+    "@types/pg": "^8",
     "nodemon": "^3.1.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"

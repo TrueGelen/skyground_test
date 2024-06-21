@@ -1,5 +1,4 @@
 import { FormEvent, ReactElement } from "react";
-import useUser from "../../hooks/useUser";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -12,16 +11,22 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
+import { toast } from "react-toastify";
+import useUser from "../../hooks/useUser";
 import PasswordInput from "../../components/PasswordInput";
 import { initialSignUpValue } from "./constants";
 import { SignUpFormData } from "./types";
 import { signUpFormSchema } from "./schemas";
+import { signUpUser } from "./api/signUpUser";
+import { ServerError } from "../../types/server-error";
+import { isValidationError } from "../../types/guards/is-validation-error";
 
 export default function SignUp(): ReactElement {
-  const { user, signUp } = useUser();
+  const { user, setUser } = useUser();
   const { state } = useLocation();
   // my todo: может посмотреть, как это типизироавть
-  const redirect = state?.prevLocation ?? "/";
+  const redirect = state?.redirectTo ?? "/";
 
   const {
     control,
@@ -35,17 +40,27 @@ export default function SignUp(): ReactElement {
   });
 
   const onSubmit = async (data: SignUpFormData) => {
-    console.log("SignIn > onSubmit", data);
-
     try {
-      // my todo:
-      signUp();
-      // await signIn(credentials);
+      const {
+        data: { user, accessToken },
+      } = await signUpUser(data);
+      localStorage.setItem("token", accessToken);
+      setUser(user);
     } catch (error) {
-      // my todo: mb ошибку бедет сервер возвращать, вообще посмотреть, как отображаюся
-      setError("password", {
-        message: "Invalid username or password",
-      });
+      if (axios.isAxiosError<ServerError>(error)) {
+        const err = error.response?.data?.error;
+        if (isValidationError(err)) {
+          console.log("isValidationError", err);
+          return err.errors.map(({ property, constraints }) =>
+            setError(property as keyof SignUpFormData, {
+              type: "server",
+              message: Object.values(constraints).at(0),
+            })
+          );
+        }
+      }
+
+      toast.error("Something went wrong :(");
     }
   };
 
@@ -76,7 +91,10 @@ export default function SignUp(): ReactElement {
                     label="First name"
                     size="small"
                     error={fieldState.invalid}
-                    helperText={fieldState.invalid && "Minimum of 3 characters"}
+                    helperText={
+                      (fieldState.invalid && fieldState?.error?.message) ??
+                      "Minimum of 3 characters"
+                    }
                   />
                 )}
               />
@@ -90,15 +108,28 @@ export default function SignUp(): ReactElement {
                     label="Last name"
                     size="small"
                     error={fieldState.invalid}
-                    helperText={fieldState.invalid && "Minimum of 3 characters"}
+                    helperText={
+                      (fieldState.invalid && fieldState?.error?.message) ??
+                      "Minimum of 3 characters"
+                    }
                   />
                 )}
               />
               <Controller
                 control={control}
                 name="email"
-                render={({ field }) => (
-                  <TextField {...field} fullWidth label="Email" size="small" />
+                render={({ field, fieldState }) => (
+                  <TextField
+                    {...field}
+                    fullWidth
+                    label="Email"
+                    size="small"
+                    error={fieldState.invalid}
+                    helperText={
+                      (fieldState.invalid && fieldState?.error?.message) ??
+                      "Minimum of 3 characters"
+                    }
+                  />
                 )}
               />
               <Controller
@@ -112,7 +143,7 @@ export default function SignUp(): ReactElement {
                     size="small"
                     error={fieldState.invalid}
                     helperText={
-                      fieldState.invalid &&
+                      (fieldState.invalid && fieldState?.error?.message) ??
                       "The password must contain at least 8 characters and consist of at least one letter and one digit"
                     }
                   />
@@ -129,7 +160,8 @@ export default function SignUp(): ReactElement {
                     size="small"
                     error={fieldState.invalid}
                     helperText={
-                      fieldState.invalid && "The passwords did not match"
+                      (fieldState.invalid && fieldState?.error?.message) ??
+                      "The passwords did not match"
                     }
                   />
                 )}
@@ -137,7 +169,6 @@ export default function SignUp(): ReactElement {
               {isSubmitting ? (
                 <CircularProgress size={36} />
               ) : (
-                // my todo: потом сделать так, что бы кнопку можно было нажать, только когда все заполнено
                 <Button disabled={!isValid} type="submit" variant="contained">
                   Sign up
                 </Button>
@@ -147,7 +178,7 @@ export default function SignUp(): ReactElement {
 
           <Typography variant="caption" textAlign="center">
             <span>Already have an account? </span>
-            <Link to="/signin" state={{ prevLocation: redirect }}>
+            <Link to="/signin" state={{ redirectTo: redirect }}>
               Sign in
             </Link>
           </Typography>

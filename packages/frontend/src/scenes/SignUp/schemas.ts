@@ -5,7 +5,11 @@ export const signUpFormSchema = z
     firstName: z.string().min(3),
     lastName: z.string().min(3),
     email: z.string().email(),
-    password: z.string().min(8).regex(/[a-z]/).regex(/[0-9]/),
+    password: z
+      .string()
+      .min(8)
+      .regex(/[A-Za-z]/)
+      .regex(/[0-9]/),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
