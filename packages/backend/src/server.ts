@@ -16,17 +16,15 @@ app.use(
     origin: config.CLIENT_URL,
   })
 );
-
-const PORT = process.env.PORT ?? 8080;
-
 app.use("/", userRoutes);
 app.use(errorMiddleware);
+
 AppDataSource.initialize()
   .then(async () => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on PROT = ${PORT}`);
+    app.listen(config.PORT, () => {
+      console.log(`Server is running on PROT = ${config.PORT}`);
     });
 
     console.log("Data Source has been initialized!");
   })
-  .catch((error) => console.log(error));
+  .catch((error) => console.error(error));

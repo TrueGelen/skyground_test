@@ -1,5 +1,4 @@
 import { FormEvent, ReactElement } from "react";
-import useUser from "../../hooks/useUser";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import {
   Box,
@@ -12,21 +11,25 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { initialCredentialsValue } from "./constants";
+import axios from "axios";
+import { toast } from "react-toastify";
+import useUser from "../../hooks/useUser";
 import PasswordInput from "../../components/PasswordInput";
+import { ServerError } from "../../types/server-error";
+import { initialCredentialsValue } from "./constants";
 import { SignInFormData } from "./types";
 import { signInFormSchema } from "./schemas";
+import { signInUser } from "./api/signInUser";
 
 export default function SignIn(): ReactElement {
-  const { user, signIn } = useUser();
+  const { user, setUser } = useUser();
   const { state } = useLocation();
-  // my todo: может посмотреть, как это типизироавть
+
   const redirect = state?.redirectTo ?? "/";
 
   const {
     control,
     formState: { isSubmitting, isValid },
-    setError,
     handleSubmit,
   } = useForm<SignInFormData>({
     defaultValues: initialCredentialsValue,
@@ -35,17 +38,14 @@ export default function SignIn(): ReactElement {
   });
 
   const onSubmit = async (data: SignInFormData) => {
-    console.log("SignIn > onSubmit", data);
-
     try {
-      // my todo:
-      signIn();
-      // await signIn(credentials);
+      const { data: user } = await signInUser(data);
+
+      setUser(user);
     } catch (error) {
-      // my todo: mb ошибку бедет сервер возвращать, вообще посмотреть, как отображаюся
-      setError("password", {
-        message: "Invalid username or password",
-      });
+      if (axios.isAxiosError<ServerError>(error)) {
+        toast.error(error.message);
+      }
     }
   };
 
@@ -88,7 +88,6 @@ export default function SignIn(): ReactElement {
               {isSubmitting ? (
                 <CircularProgress size={36} />
               ) : (
-                // my todo: потом сделать так, что бы кнопку можно было нажать, только когда все заполнено
                 <Button disabled={!isValid} type="submit" variant="contained">
                   Sign in
                 </Button>

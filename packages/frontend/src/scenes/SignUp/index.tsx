@@ -15,17 +15,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import useUser from "../../hooks/useUser";
 import PasswordInput from "../../components/PasswordInput";
+import { ServerError } from "../../types/server-error";
+import { isValidationError } from "../../types/guards/is-validation-error";
+import { signUpUser } from "./api/signUpUser";
 import { initialSignUpValue } from "./constants";
 import { SignUpFormData } from "./types";
 import { signUpFormSchema } from "./schemas";
-import { signUpUser } from "./api/signUpUser";
-import { ServerError } from "../../types/server-error";
-import { isValidationError } from "../../types/guards/is-validation-error";
 
 export default function SignUp(): ReactElement {
   const { user, setUser } = useUser();
   const { state } = useLocation();
-  // my todo: может посмотреть, как это типизироавть
+
   const redirect = state?.redirectTo ?? "/";
 
   const {
@@ -41,16 +41,13 @@ export default function SignUp(): ReactElement {
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      const {
-        data: { user, accessToken },
-      } = await signUpUser(data);
-      localStorage.setItem("token", accessToken);
+      const { data: user } = await signUpUser(data);
+
       setUser(user);
     } catch (error) {
       if (axios.isAxiosError<ServerError>(error)) {
         const err = error.response?.data?.error;
         if (isValidationError(err)) {
-          console.log("isValidationError", err);
           return err.errors.map(({ property, constraints }) =>
             setError(property as keyof SignUpFormData, {
               type: "server",

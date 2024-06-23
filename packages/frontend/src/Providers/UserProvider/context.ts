@@ -1,16 +1,21 @@
-import { Dispatch, SetStateAction, createContext } from "react";
+import { createContext } from "react";
 
-export type User = {
+export type UserStatic = {
   id: string;
   firstName: string;
   lastName: string;
-  fullName: string;
   email: string;
 };
 
+export type UserComputedFields = {
+  fullName: string;
+};
+
+export type User = UserStatic & UserComputedFields;
+
 export type UserContextType = {
   user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
+  setUser: (user: UserStatic | null) => void;
 };
 
 const defaultContextValue: UserContextType = {

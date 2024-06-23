@@ -2,15 +2,16 @@ import bcrypt from "bcrypt";
 import { AppDataSource } from "../../data-source.js";
 import { User } from "../../entities/user.entity.js";
 import { ApiError } from "../../exceptions/api-errors.js";
-import { GenerateTokensPayloadDTO } from "../token/dtos/sign-up-user.dto.js";
 import { tokenService } from "../token/token-service.js";
-import { CreateUserDto } from "./dtos/sign-up-user.dto.js";
-import { SignInUserDto } from "./dtos/sign-in-user.dto.js";
+import { UserDTO } from "./dtos/user.dto.js";
+import { GenerateTokensPayloadDTO } from "../token/dtos/generate-tokens-payload.dto.js";
+import { SignIpUserPayloadDTO } from "./dtos/sign-in-user-payload.dto.js";
+import { SignUpUserPayloadDTO } from "./dtos/sign-up-user-payload.dto.js";
 
 class UserService {
   private userRepository = AppDataSource.getRepository(User);
 
-  async signUp(userData: CreateUserDto) {
+  async signUp(userData: SignUpUserPayloadDTO) {
     const candidate = await this.userRepository.findOne({
       where: { email: userData.email },
     });
@@ -32,13 +33,15 @@ class UserService {
       ...userData,
       password: hashPassword,
     });
-    const generateTokenPayloadDto = new GenerateTokensPayloadDTO(user);
-    const tokens = tokenService.generateTokens({ ...generateTokenPayloadDto });
 
-    return { user: generateTokenPayloadDto, ...tokens };
+    const tokens = tokenService.generateTokens(
+      new GenerateTokensPayloadDTO(user)
+    );
+
+    return { user: new UserDTO(user), tokens: tokens };
   }
 
-  async signIn(userData: SignInUserDto) {
+  async signIn(userData: SignIpUserPayloadDTO) {
     const user = await this.userRepository.findOne({
       where: { email: userData.email },
     });
@@ -68,25 +71,19 @@ class UserService {
       });
     }
 
-    const generateTokenPayloadDto = new GenerateTokensPayloadDTO(user);
-    const tokens = tokenService.generateTokens({ ...generateTokenPayloadDto });
+    const tokens = tokenService.generateTokens(
+      new GenerateTokensPayloadDTO(user)
+    );
 
-    return { user: generateTokenPayloadDto, ...tokens };
+    return { user: new UserDTO(user), ...tokens };
   }
 
-  async signOut() {}
-
   async getUsers() {
-    return new Promise((resolve) =>
-      resolve([
-        {
-          id: "0",
-          email: "some@ya.ru",
-          firstName: "Ivan",
-          lastName: "Ivanov",
-        },
-      ])
-    );
+    const users = await this.userRepository.find();
+
+    const dtos = users.map((user) => new UserDTO(user));
+
+    return dtos;
   }
 }
 

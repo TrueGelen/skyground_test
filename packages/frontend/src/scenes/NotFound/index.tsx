@@ -2,7 +2,6 @@ import { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { Stack, Typography } from "@mui/material";
 
-// my todo: дописать норм стили
 export default function NotFound(): ReactElement {
   return (
     <Stack gap={5} alignItems="center" justifyContent="center" height="100dvh">

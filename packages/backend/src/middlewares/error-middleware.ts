@@ -7,9 +7,11 @@ export function errorMiddleware(
   res: Response,
   next: NextFunction
 ) {
-  console.error(`Error: ${e.message}`);
+  console.error(`errorMiddleware > Error: ${e.message}`);
+
   if (e instanceof ApiError) {
     return res.status(e.error.status).json(e);
   }
+
   return res.status(500).json({ message: "Something went wrong :(" });
 }
