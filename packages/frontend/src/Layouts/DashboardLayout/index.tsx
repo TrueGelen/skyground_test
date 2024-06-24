@@ -2,8 +2,8 @@ import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
 import { ReactElement, useCallback } from "react";
 import { Outlet } from "react-router-dom";
 import { toast } from "react-toastify";
+import useUser from "@/hooks/useUser";
 import { signOut } from "./api/signOut";
-import useUser from "../../hooks/useUser";
 
 export default function DashboardLayout(): ReactElement {
   const { user, setUser } = useUser();

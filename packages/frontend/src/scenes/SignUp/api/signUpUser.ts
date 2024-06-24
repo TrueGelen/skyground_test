@@ -1,5 +1,5 @@
-import { User } from "../../../Providers/UserProvider/context";
-import { apiClient } from "../../../axios";
+import { apiClient } from "@/axios";
+import { User } from "@/Providers/UserProvider/context";
 import { SignUpFormData } from "../types";
 
 export async function signUpUser(user: SignUpFormData) {

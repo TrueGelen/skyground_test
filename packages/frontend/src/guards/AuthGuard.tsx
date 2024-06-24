@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import useUser from "../hooks/useUser";
+import useUser from "@/hooks/useUser";
 
 type AuthGuardProps = {
   children: ReactNode;

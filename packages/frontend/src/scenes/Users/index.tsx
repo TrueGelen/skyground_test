@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Paper, Stack, Typography } from "@mui/material";
-import { User } from "../../Providers/UserProvider/context";
+import { User } from "@/Providers/UserProvider/context";
 import { fetchUsers } from "./api/fetchUsers";
 import SceneSpinner from "../../components/SceneSpinner";
 
