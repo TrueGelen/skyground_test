@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { tokenService } from "../services/token/token-service.js";
 
-export function authMiddleware(
+export async function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
@@ -10,7 +10,7 @@ export function authMiddleware(
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
 
-    const { user, tokens } = tokenService.tryToGetUserOrFail({
+    const { user, tokens } = await tokenService.tryToGetUserAndTokens({
       accessToken,
       refreshToken,
     });

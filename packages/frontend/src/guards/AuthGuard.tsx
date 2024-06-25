@@ -11,7 +11,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const location = useLocation();
 
   if (user == null) {
-    return <Navigate to="/signin" replace state={{ redirectTo: location }} />;
+    return <Navigate to="/sign-in" replace state={{ redirectTo: location }} />;
   }
 
   return <>{children}</>;

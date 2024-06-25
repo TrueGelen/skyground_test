@@ -175,7 +175,7 @@ export default function SignUp(): ReactElement {
 
           <Typography variant="caption" textAlign="center">
             <span>Already have an account? </span>
-            <Link to="/signin" state={{ redirectTo: redirect }}>
+            <Link to="/sign-in" state={{ redirectTo: redirect }}>
               Sign in
             </Link>
           </Typography>

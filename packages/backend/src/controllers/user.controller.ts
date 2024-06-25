@@ -46,7 +46,7 @@ class UserController {
 
       const user = await userService.signIn(signInUserPayload);
 
-      res.cookie("refreshToken", user.refreshToken, {
+      res.cookie("accessToken", user.accessToken, {
         httpOnly: true,
       });
 
@@ -54,7 +54,7 @@ class UserController {
         httpOnly: true,
       });
 
-      return res.json(user);
+      return res.json(user.user);
     } catch (e) {
       return next(e);
     }
