@@ -1,6 +1,6 @@
 import { axiosClient } from "@/api/axiosClient";
 import { User } from "@/providers/UserProvider/context";
 
-export async function fetchUsers() {
-  return axiosClient.get<User[]>("/users");
+export async function signOut() {
+  return axiosClient.post<User>("/sign-out");
 }

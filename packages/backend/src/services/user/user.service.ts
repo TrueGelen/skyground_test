@@ -18,11 +18,11 @@ class UserService {
 
     if (candidate != null) {
       throw ApiError.ValidationError({
-        message: "Such an email already exists.",
+        message: "A user with this email already exists.",
         errors: [
           {
             property: "email",
-            constraints: { message: "Such an email already exists." },
+            constraints: { message: "A user with this email already exists." },
           },
         ],
       });

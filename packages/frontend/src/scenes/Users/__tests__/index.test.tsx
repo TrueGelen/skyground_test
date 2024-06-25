@@ -1,12 +1,12 @@
 import { it, expect } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
-import { UserStatic } from "@/Providers/UserProvider/context";
-import Users from "..";
-import { axiosClient } from "@/api/axiosClient";
 import axiosMockAdapter from "axios-mock-adapter";
+import { axiosClient } from "@/api/axiosClient";
+import { User } from "@/providers/UserProvider/context";
+import Users from "..";
 
 describe("Users", () => {
-  const usersResponse: UserStatic[] = [
+  const usersResponse: User[] = [
     {
       id: "0",
       firstName: "Vlad",

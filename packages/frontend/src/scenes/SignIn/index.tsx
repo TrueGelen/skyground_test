@@ -97,7 +97,7 @@ export default function SignIn(): ReactElement {
 
           <Typography variant="caption" textAlign="center">
             <span>New to Skyground? </span>
-            <Link to="/signup" state={{ redirectTo: redirect }}>
+            <Link to="/sign-up" state={{ redirectTo: redirect }}>
               Create an account
             </Link>
           </Typography>

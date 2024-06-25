@@ -4,8 +4,8 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 
 export const userRoutes = Router();
 
-userRoutes.post("/signup", userController.signUp);
-userRoutes.post("/signin", userController.signIn);
-userRoutes.post("/signout", userController.signOut);
+userRoutes.post("/sign-up", userController.signUp);
+userRoutes.post("/sign-in", userController.signIn);
+userRoutes.post("/sign-out", userController.signOut);
 userRoutes.get("/users", authMiddleware, userController.getUsers);
 userRoutes.get("/me", authMiddleware, userController.me);

@@ -22,7 +22,9 @@ export default function DashboardLayout(): ReactElement {
       <AppBar position="sticky">
         <Stack width="100%" maxWidth="1280px" margin="0 auto">
           <Toolbar sx={{ justifyContent: "space-between" }}>
-            <Typography variant="body1">Welcome, {user?.fullName} !</Typography>
+            <Typography variant="body1">
+              Welcome, {`${user?.firstName} ${user?.lastName}`} !
+            </Typography>
             <Button color="inherit" onClick={handleSignOut}>
               Sign out
             </Button>

@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { config } from "./config.js";
+import { envConfig } from "./envConfig.js";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -9,5 +9,5 @@ export const AppDataSource = new DataSource({
   entities: ["src/**/*.entity.ts"],
   migrations: ["src/migration/*.ts"],
   subscribers: [],
-  url: config.DATABASE_URL,
+  url: envConfig.DATABASE_URL,
 });
