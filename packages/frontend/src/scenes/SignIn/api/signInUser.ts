@@ -1,7 +1,7 @@
-import { apiClient } from "@/axios";
+import { axiosClient } from "@/api/axiosClient";
 import { User } from "@/Providers/UserProvider/context";
 import { SignInFormData } from "../types";
 
 export async function signInUser(user: SignInFormData) {
-  return apiClient.post<User>("/signin", user);
+  return axiosClient.post<User>("/signin", user);
 }

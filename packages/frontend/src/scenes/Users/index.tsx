@@ -9,19 +9,19 @@ export default function Users(): ReactElement {
   const [users, setUsers] = useState<User[] | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchData = async () => {
+    try {
+      const { data } = await fetchUsers();
+
+      setUsers(data);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error("Something went wrong :(");
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await fetchUsers();
-
-        setUsers(data);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        toast.error("Something went wrong :(");
-      }
-    };
-
     fetchData();
   }, []);
 

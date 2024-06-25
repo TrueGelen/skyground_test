@@ -26,7 +26,13 @@ const PasswordInput = forwardRef<HTMLInputElement, StandardTextFieldProps>(
           endAdornment: (
             <InputAdornment position="end">
               <IconButton edge="end" onClick={handleClickShowPassword}>
-                {showPassword ? <VisibilityOff /> : <Visibility />}
+                {showPassword ? (
+                  <VisibilityOff
+                    data-testid={"passwordInput__visibility-off-icon"}
+                  />
+                ) : (
+                  <Visibility />
+                )}
               </IconButton>
             </InputAdornment>
           ),

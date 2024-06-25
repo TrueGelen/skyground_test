@@ -9,6 +9,7 @@ export default function SceneSpinner(): ReactElement {
       justifyContent="center"
       spacing={2}
       width="100%"
+      data-testid="scene_spinner"
     >
       <CircularProgress />
       <p>Loading...</p>

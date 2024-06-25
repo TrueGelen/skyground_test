@@ -1,6 +1,6 @@
-import { apiClient } from "@/axios";
+import { axiosClient } from "@/api/axiosClient";
 import { User } from "@/Providers/UserProvider/context";
 
 export async function fetchUsers() {
-  return apiClient.get<User[]>("/users");
+  return axiosClient.get<User[]>("/users");
 }

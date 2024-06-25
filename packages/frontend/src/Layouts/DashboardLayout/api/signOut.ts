@@ -1,6 +1,6 @@
-import { apiClient } from "@/axios";
+import { axiosClient } from "@/api/axiosClient";
 import { User } from "@/Providers/UserProvider/context";
 
 export async function signOut() {
-  return apiClient.post<User>("/signout");
+  return axiosClient.post<User>("/signout");
 }

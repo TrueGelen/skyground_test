@@ -1,6 +1,6 @@
-import { apiClient } from "@/axios";
+import { axiosClient } from "@/api/axiosClient";
 import { User } from "@/Providers/UserProvider/context";
 
 export async function fetchProfile() {
-  return apiClient.get<User>("/me");
+  return axiosClient.get<User>("/me");
 }
