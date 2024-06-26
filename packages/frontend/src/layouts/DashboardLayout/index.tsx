@@ -1,21 +1,15 @@
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
 import { ReactElement, useCallback } from "react";
-import { Outlet } from "react-router-dom";
-import { toast } from "react-toastify";
+import { Link, Outlet } from "react-router-dom";
 import useUser from "@/hooks/useUser";
-import { signOut } from "./api/signOut";
+import useFetchUser from "./hooks/useFetchUser";
 
 export default function DashboardLayout(): ReactElement {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
 
-  const handleSignOut = useCallback(async () => {
-    try {
-      await signOut();
-      setUser(null);
-    } catch (error) {
-      toast.error("Failed to sign out, try again. Something went wrong :(");
-    }
-  }, [setUser]);
+  const { mutate: signOutMutate } = useFetchUser();
+
+  const handleSignOut = useCallback(() => signOutMutate(), []);
 
   return (
     <Stack spacing={2} alignItems="center" height="100%">

@@ -11,18 +11,15 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { toast } from "react-toastify";
 import useUser from "@/hooks/useUser";
 import PasswordInput from "@/components/PasswordInput";
-import { ServerError } from "../../types/server-error";
 import { initialCredentialsValue } from "./constants";
 import { SignInFormData } from "./types";
 import { signInFormSchema } from "./schemas";
-import { signInUser } from "./api/signInUser";
+import useSignIn from "./hooks/useSignIn";
 
 export default function SignIn(): ReactElement {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const { state } = useLocation();
 
   const redirect = state?.redirectTo ?? "/";
@@ -37,17 +34,9 @@ export default function SignIn(): ReactElement {
     mode: "onChange",
   });
 
-  const onSubmit = async (data: SignInFormData) => {
-    try {
-      const { data: user } = await signInUser(data);
+  const { mutate: signInMutate } = useSignIn();
 
-      setUser(user);
-    } catch (error) {
-      if (axios.isAxiosError<ServerError>(error)) {
-        toast.error(error.message);
-      }
-    }
-  };
+  const onSubmit = (data: SignInFormData) => signInMutate(data);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void =>
     void handleSubmit(onSubmit)(e);

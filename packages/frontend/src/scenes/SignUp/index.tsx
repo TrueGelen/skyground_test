@@ -11,19 +11,15 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { toast } from "react-toastify";
 import useUser from "@/hooks/useUser";
 import PasswordInput from "@/components/PasswordInput";
-import { ServerError } from "../../types/server-error";
-import { isValidationError } from "../../types/guards/is-validation-error";
-import { signUpUser } from "./api/signUpUser";
 import { initialSignUpValue } from "./constants";
 import { SignUpFormData } from "./types";
 import { signUpFormSchema } from "./schemas";
+import useSignUp from "./hooks/useSignUp";
 
 export default function SignUp(): ReactElement {
-  const { user, setUser } = useUser();
+  const { user } = useUser();
   const { state } = useLocation();
 
   const redirect = state?.redirectTo ?? "/";
@@ -39,27 +35,9 @@ export default function SignUp(): ReactElement {
     mode: "onChange",
   });
 
-  const onSubmit = async (data: SignUpFormData) => {
-    try {
-      const { data: user } = await signUpUser(data);
+  const { mutate: signUpMutate } = useSignUp(setError);
 
-      setUser(user);
-    } catch (error) {
-      if (axios.isAxiosError<ServerError>(error)) {
-        const err = error.response?.data?.error;
-        if (isValidationError(err)) {
-          return err.errors.map(({ property, constraints }) =>
-            setError(property as keyof SignUpFormData, {
-              type: "server",
-              message: Object.values(constraints).at(0),
-            })
-          );
-        }
-      }
-
-      toast.error("Something went wrong :(");
-    }
-  };
+  const onSubmit = (data: SignUpFormData) => signUpMutate(data);
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>): void =>
     void handleSubmit(onSubmit)(e);

@@ -1,7 +1,8 @@
-import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { ReactElement, ReactNode, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosClient } from "@/api/axiosClient";
 import SceneSpinner from "@/components/SceneSpinner";
-import UserContext, { User } from "./context";
+import UserContext from "./context";
 import { fetchProfile } from "./api/fetchProfile";
 
 type UserProviderProps = { children: ReactNode };
@@ -9,38 +10,31 @@ type UserProviderProps = { children: ReactNode };
 export default function UserProvider({
   children,
 }: UserProviderProps): ReactElement {
-  const [me, setMe] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: user, isLoading } = useQuery({
+    initialData: null,
+    queryKey: ["user"],
+    queryFn: fetchProfile,
+  });
+
+  const client = useQueryClient();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data: me } = await fetchProfile();
-
-        setLoading(false);
-        setMe(me);
-      } catch (error) {
-        setLoading(false);
-        setMe(null);
+    const interceptor = axiosClient.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.response && error.response.status === 401) {
+          client.setQueryData(["user"], null);
+        }
+        return Promise.reject(error);
       }
-    };
+    );
 
-    fetchUser();
-  }, [setMe]);
-
-  axiosClient.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        setMe(null);
-      }
-      return Promise.reject(error);
-    }
-  );
+    return () => axiosClient.interceptors.response.eject(interceptor);
+  }, []);
 
   return (
-    <UserContext.Provider value={{ user: me, setUser: setMe }}>
-      <>{loading ? <SceneSpinner /> : children}</>
+    <UserContext.Provider value={{ user }}>
+      {isLoading ? <SceneSpinner /> : children}
     </UserContext.Provider>
   );
 }

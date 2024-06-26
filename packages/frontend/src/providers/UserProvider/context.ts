@@ -9,12 +9,10 @@ export type User = {
 
 export type UserContextType = {
   user: User | null;
-  setUser: (user: User | null) => void;
 };
 
 const defaultContextValue: UserContextType = {
   user: null,
-  setUser: () => undefined,
 };
 
 const UserContext = createContext<UserContextType>(defaultContextValue);

@@ -14,16 +14,14 @@ export type Tokens = {
 class TokenService {
   generateTokens(payload: GenerateTokensPayloadDTO): Tokens {
     const accessToken = jwt.sign({ ...payload }, envConfig.JWT_ACCESS_SECRET, {
-      // expiresIn: "15m",
-      expiresIn: "15s",
+      expiresIn: "15m",
     });
 
     const refreshToken = jwt.sign(
       { ...payload },
       envConfig.JWT_REFRESH_SECRET,
       {
-        // expiresIn: "30d",
-        expiresIn: "30s",
+        expiresIn: "30d",
       }
     );
 
