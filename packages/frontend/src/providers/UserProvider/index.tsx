@@ -26,7 +26,7 @@ export default function UserProvider({
     };
 
     fetchUser();
-  }, [setMe]);
+  }, []);
 
   axiosClient.interceptors.response.use(
     (response) => response,

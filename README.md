@@ -17,3 +17,7 @@
 1. Clone the repository to your local machine
 2. Install the dependencies:
 3. Navigate to the frontend and backend folders and start with `yarn dev`
+
+## Also
+
+The `frontend` package has an `add-react-query` branch. The `react-query` package has been added there, but not all tests have been fixed.
